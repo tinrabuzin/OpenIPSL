@@ -50,7 +50,7 @@ model TwoWindingTapRatio
         extent={{-22,-21},{22,21}},
         rotation=180,
         origin={-2,41})));
-  OpenIPSL.Electrical.Branches.PSSE.Old_transformer.phaseShift phaseship(phase=0) annotation (Placement(transformation(extent={{4,-16},{58,14}})));
+  update.phaseshift phaseship(phase=0) annotation (Placement(transformation(extent={{4,-16},{58,14}})));
 protected
   parameter Real angle=angle_d/180*pi "angel shift in rad";
 protected
@@ -87,26 +87,23 @@ equation
       points={{-12.78,41},{-13.135,41},{-13.135,8.8},{-21.6,8.8}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(phaseship.n, P2) annotation (Line(
-      points={{54.76,0.5},{74.16,0.5},{74.16,16},{89,16}},
-      color={0,0,255},
-      smooth=Smooth.None));
-  connect(phaseship.p, pwLine1.n) annotation (Line(
-      points={{6.7,0.5},{6.7,0},{-18.7,0}},
-      color={0,0,255},
-      smooth=Smooth.None));
+  connect(phaseship.T, P2) annotation (Line(points={{54.22,0.2},{69.11,0.2},{69.11,16},{89,16}}, color={0,0,255}));
+  connect(phaseship.F, pwLine1.n) annotation (Line(points={{6.16,0.2},{-6.92,0.2},{-6.92,0},{-18.7,0}}, color={0,0,255}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,100}}), graphics),
-    Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,100}}), graphics={Text(
+    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}})),
+    Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,100}}), graphics={
+        Text(
           extent={{26,54},{114,2}},
           lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid,
           textString="*",
-          textStyle={TextStyle.Bold}),Ellipse(
+          textStyle={TextStyle.Bold}),
+        Ellipse(
           extent={{-74,44},{6,-40}},
           lineColor={0,0,255},
-          lineThickness=0.5),Ellipse(
+          lineThickness=0.5),
+        Ellipse(
           extent={{-10,44},{70,-40}},
           lineColor={0,0,255},
           lineThickness=0.5)}),

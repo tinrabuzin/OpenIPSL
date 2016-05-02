@@ -1,7 +1,6 @@
 within OpenIPSL.Electrical.Banks.PSSE.SVC;
 model SVC "On bus 10106 & 10114"
-  OpenIPSL.Connectors.PwPin VIB
-    "Voltage signal connected to stepdown transformer (pu)"                             annotation (Placement(transformation(extent={{-98,-4},{-86,8}})));
+  OpenIPSL.Connectors.PwPin VIB "Voltage signal connected to stepdown transformer (pu)" annotation (Placement(transformation(extent={{-98,-4},{-86,8}})));
   Modelica.Blocks.Sources.Constant imSetPoint(k=Vref) annotation (Placement(transformation(extent={{-76,20},{-64,32}})));
   Modelica.Blocks.Sources.Constant imSetPoint1(k=Bref) annotation (Placement(transformation(extent={{-52,20},{-38,34}})));
   OpenIPSL.NonElectrical.Continuous.LeadLag imLeadLag(
@@ -41,12 +40,10 @@ model SVC "On bus 10106 & 10114"
   parameter Real init_SVC_Leadlag "Initial value";
   parameter Real init_SVC_Lag "Initial value";
   parameter Real OtherSignals;
-  parameter Real Mvar_C=100
-    "Total compensation capacity of shunt capacitor, 100(10106)/200(10114) MVar";
-  parameter Real Mvar_R=-50
-    "Total compensation capacity of shunt reactor, MVar";
+  parameter Real Mvar_C=100 "Total compensation capacity of shunt capacitor, 100(10106)/200(10114) MVar";
+  parameter Real Mvar_R=-50 "Total compensation capacity of shunt reactor, MVar";
   Modelica.Blocks.Sources.Constant imSetPoint2(k=OtherSignals) annotation (Placement(transformation(extent={{-52,-18},{-40,-6}})));
-  OpenIPSL.Electrical.Sensors.PwVoltage pwVoltage annotation (Placement(transformation(extent={{-90,-14},{-58,20}})));
+  Essentials.PwVoltage pwVoltage annotation (Placement(transformation(extent={{-90,-14},{-58,20}})));
   Modelica.Blocks.Math.Add add(k1=1, k2=-1) annotation (Placement(transformation(extent={{-58,0},{-46,12}})));
   Modelica.Blocks.Math.Add3 add3_1(k1=-1, k3=-1) annotation (Placement(transformation(extent={{-28,2},{-14,16}})));
 equation
@@ -74,32 +71,41 @@ equation
   connect(add.y, add3_1.u2) annotation (Line(points={{-45.4,6},{-38,6},{-38,9},{-29.4,9}}, color={0,0,127}));
   connect(imRelay.u1, add3_1.u2) annotation (Line(points={{50.4,-38},{36,-38},{36,-54},{-36,-54},{-36,9},{-29.4,9}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{140,100}}), graphics={Text(
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{140,100}}), graphics={
+        Text(
           extent={{-44,16},{-34,12}},
           lineColor={255,0,0},
-          textString="Verr"),Text(
+          textString="Verr"),
+        Text(
           extent={{-82,28},{-58,24}},
           lineColor={255,0,0},
-          textString="Vref"),Text(
+          textString="Vref"),
+        Text(
           extent={{-58,28},{-34,24}},
           lineColor={255,0,0},
-          textString="Bref"),Text(
+          textString="Bref"),
+        Text(
           extent={{-80,-4},{-68,-10}},
           lineColor={255,0,0},
           textString="|VB|")}),
-    Icon(coordinateSystem(extent={{-100,-100},{140,100}}, preserveAspectRatio=false), graphics={Line(
+    Icon(coordinateSystem(extent={{-100,-100},{140,100}}, preserveAspectRatio=false), graphics={
+        Line(
           points={{-88,0},{-60,0}},
           color={0,0,255},
           smooth=Smooth.None,
-          thickness=0.5),Line(
+          thickness=0.5),
+        Line(
           points={{-60,16},{-60,-18}},
           color={0,0,255},
           smooth=Smooth.None,
-          thickness=0.5),Line(
+          thickness=0.5),
+        Line(
           points={{-44,20},{-48,16},{-52,10},{-54,2},{-54,-4},{-52,-10},{-50,-14},{-46,-20},{-44,-20}},
           color={0,0,255},
           smooth=Smooth.Bezier,
-          thickness=0.5),Rectangle(extent={{-86,34},{-14,-34}}, lineColor={0,0,255}),Text(
+          thickness=0.5),
+        Rectangle(extent={{-86,34},{-14,-34}}, lineColor={0,0,255}),
+        Text(
           extent={{-40,-18},{-14,-40}},
           lineColor={0,0,255},
           fillColor={0,0,255},

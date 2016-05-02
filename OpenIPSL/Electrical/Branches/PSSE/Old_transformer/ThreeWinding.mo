@@ -1,13 +1,10 @@
 within OpenIPSL.Electrical.Branches.PSSE.Old_transformer;
 model ThreeWinding
-  parameter Real C1[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0]
-    "Primary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
+  parameter Real C1[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0] "Primary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
   parameter Real D1[1, 3]=[17, 5, 0] "Delay TD TC TSD";
-  parameter Real C2[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0]
-    "Secondary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
+  parameter Real C2[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0] "Secondary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
   parameter Real D2[1, 3]=[17, 5, 0] "Delay TD TC TSD";
-  parameter Real C3[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0]
-    "Tertiary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
+  parameter Real C3[1, 6]=[1.1, 0.9, 1.1, 0.9, 33, 0] "Tertiary winding: Vmax Vmin Rmax Rmin Ntap angle  ";
   parameter Real D3[1, 3]=[17, 5, 0] "Delay TD TC TSD";
   // parameter Complex Z12"short circuit test impedance";
   // parameter Complex Z23 "short circuit test impedance";
@@ -32,7 +29,7 @@ model ThreeWinding
         extent={{-28,-23},{28,23}},
         rotation=180,
         origin={-40,-1})));
-  OpenIPSL.Electrical.Sensors.PwVoltage V1 annotation (Placement(transformation(
+  Essentials.PwVoltage V1 annotation (Placement(transformation(
         extent={{-7,-9},{7,9}},
         rotation=90,
         origin={-71,-25})));
@@ -46,7 +43,7 @@ model ThreeWinding
         rotation=0,
         origin={38,15})));
   OpenIPSL.Connectors.PwPin P2_control annotation (Placement(transformation(extent={{80,14},{100,34}}), iconTransformation(extent={{90,42},{98,50}})));
-  OpenIPSL.Electrical.Sensors.PwVoltage V2 annotation (Placement(transformation(
+  Essentials.PwVoltage V2 annotation (Placement(transformation(
         extent={{-7,-9},{7,9}},
         rotation=180,
         origin={69,-1})));
@@ -58,7 +55,7 @@ model ThreeWinding
         extent={{-28,-23},{28,23}},
         rotation=0,
         origin={40,-35})));
-  OpenIPSL.Electrical.Sensors.PwVoltage V3 annotation (Placement(transformation(
+  Essentials.PwVoltage V3 annotation (Placement(transformation(
         extent={{-7,-9},{7,9}},
         rotation=180,
         origin={71,-51})));
