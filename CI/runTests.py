@@ -109,7 +109,7 @@ class CITests():
         '''
         Does postprocessing of PSSE result file
         '''
-        h5file = h5py.File('CI/'+model+'.h5', 'r')
+        h5file = h5py.File('/OpenIPSL/CI/'+model+'.h5', 'r')
         dataPSSE = {}
         dataPSSE['P'] = h5file['P'][...]
         dataPSSE['Q'] = h5file['Q'][...]
@@ -142,7 +142,7 @@ class CITests():
 
         RMSE = np.sqrt(sum(np.square(Y2-Y1))/len(Y2))
 
-        self.plotComparison(X1, Y1, X2, Y2, signal)
+        # self.plotComparison(X1, Y1, X2, Y2, signal)
         '''
         suma = 0
         for i in range(0, len(Y1)-1):
