@@ -85,7 +85,9 @@ class CITests():
                                          + 'tolerance=%s, method=%s, outputFormat="%s")' % (tolerance, method, outputFormat))
 
         print 'Simulation time: %s' % (answer['timeSimulation'])
-
+        print answer
+        a = self.omc.sendExpression('getErrorString()')
+        print a
         return answer['resultFile']
 
     def postProcessModelica(self, resultFile):
