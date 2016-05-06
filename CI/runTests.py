@@ -18,7 +18,11 @@ class CITests():
         self.libPath = libPath
         self.omc = OMCSession()
         self.omc.sendExpression("loadModel(Modelica)")
-        self.omc.sendExpression('loadFile("%s")' % (self.libPath))
+        if self.omc.sendExpression('loadFile("%s")' % (self.libPath)):
+            print "OpenIPSL is successfully loaded."
+        else:
+            raise Exception('OpenIPSL was not loaded! Check the library path.')
+
 
     def runCheck(self):
         '''
@@ -60,13 +64,16 @@ class CITests():
         self.omc.sendExpression('cd("/OpenIPSL/CI")')
 
         for model in test_list:
-            resultFile = self.simulateModel(model)
-            dataModelica = self.postProcessModelica(resultFile)
-            dataPSSE = self.postProcessPSSE(model)
-            for key in dataModelica.keys():
-                RMSE = self.calculateRMSE(dataModelica['time'], dataModelica[key], dataPSSE['time'], dataPSSE[key], key)
-                print 'RMSE for signal %s is - %s' % (key, RMSE)
-
+            if self.omc.sendExpression("isModel(%s)" % (model)):
+                resultFile = self.simulateModel(model)
+                dataModelica = self.postProcessModelica(resultFile)
+                dataref = self.postProcessReference(model)
+                print "Signal RMSE values follow:"
+                for key in dataModelica.keys():
+                    RMSE = self.calculateRMSE(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
+                    print '%s - %s' % (key, RMSE)
+            else:
+                print "Class %s is not a model! Continuing to the next class." % (model)
         return dataModelica, dataPSSE
 
     def simulateModel(self, model):
@@ -85,9 +92,7 @@ class CITests():
                                          + 'tolerance=%s, method=%s, outputFormat="%s")' % (tolerance, method, outputFormat))
 
         print 'Simulation time: %s' % (answer['timeSimulation'])
-        print answer
-        a = self.omc.sendExpression('getErrorString()')
-        print a
+        errMsg = self.omc.sendExpression('getErrorString()')
         return answer['resultFile']
 
     def postProcessModelica(self, resultFile):
@@ -105,19 +110,19 @@ class CITests():
 
         return dataModelica
 
-    def postProcessPSSE(self, model):
+    def postProcessReference(self, model):
         '''
         Does postprocessing of PSSE result file
         '''
         h5file = h5py.File('/OpenIPSL/CI/'+model+'.h5', 'r')
-        dataPSSE = {}
-        dataPSSE['P'] = h5file['P'][...]
-        dataPSSE['Q'] = h5file['Q'][...]
-        dataPSSE['ETERM'] = h5file['ETERM'][...]
-        dataPSSE['EFD'] = h5file['EFD'][...]
-        dataPSSE['time'] = h5file['Time(s)'][...]
+        dataref = {}
+        dataref['P'] = h5file['P'][...]
+        dataref['Q'] = h5file['Q'][...]
+        dataref['ETERM'] = h5file['ETERM'][...]
+        dataref['EFD'] = h5file['EFD'][...]
+        dataref['time'] = h5file['Time(s)'][...]
 
-        return dataPSSE
+        return dataref
 
     def resampleData(self, X1, Y1, X2, Y2):
 
