@@ -74,7 +74,7 @@ class CITests():
                     print '%s - %s' % (key, RMSE)
             else:
                 print "Class %s is not a model! Continuing to the next class." % (model)
-        return dataModelica, dataPSSE
+        return dataModelica, dataref
 
     def simulateModel(self, model):
         '''
