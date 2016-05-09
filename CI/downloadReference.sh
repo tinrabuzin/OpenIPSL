@@ -5,6 +5,7 @@ ftp -n 130.237.53.244 <<**
 user anonymous tin
 lcd CI
 passive
+prompt off
 mget ./
 bye
 **
