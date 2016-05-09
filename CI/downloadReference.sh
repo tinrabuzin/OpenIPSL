@@ -9,3 +9,4 @@ bye
 **
 # End of "here" document
 echo Data is downloaded.
+cd ..
