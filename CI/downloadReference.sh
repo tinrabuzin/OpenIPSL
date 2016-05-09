@@ -4,6 +4,7 @@ echo Connecting to the FTP server
 ftp -n 130.237.53.244 <<**
 user anonymous tin
 lcd CI
+passive
 mget ./
 bye
 **
