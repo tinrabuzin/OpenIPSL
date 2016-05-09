@@ -1,6 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
 import sys
+import os
 import numpy as np
 import h5py
 from OMPython import OMCSession
@@ -17,6 +18,7 @@ class CITests():
         '''
         self.libPath = libPath
         self.omc = OMCSession()
+        os.chdir("/OpenIPSL")
         self.omc.sendExpression("loadModel(Modelica)")
         if self.omc.sendExpression('loadFile("%s")' % (self.libPath)):
             print "OpenIPSL is successfully loaded."
@@ -82,6 +84,7 @@ class CITests():
                         if RMSE >= 0.01:
                             result = False
                         # self.plotComparison(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
+                    print "_____________________________________________________"
                 else:
                     print "Error - Model failed to simulate!"
             else:
@@ -158,7 +161,7 @@ class CITests():
 
         RMSE = np.sqrt(sum(np.square(Y2-Y1))/len(Y2))
 
-        # self.plotComparison(X1, Y1, X2, Y2, signal)
+        self.plotComparison(X1, Y1, X2, Y2, signal)
         '''
         # Uncomment this to enable calculations of MASE
         suma = 0
