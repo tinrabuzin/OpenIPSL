@@ -50,7 +50,7 @@ class CITests():
         print "============================= Check Summary =============================="
         print "Number of models that passed the check is: %s" % nPassed
         print "Number of models that failed the check is: %s" % nFailed
-        return nFailed
+        return (nFailed == 0)
 
     def runSW2SW(self):
         '''
@@ -62,7 +62,13 @@ class CITests():
         test_list = ["OpenIPSL.Examples.Machines.PSSE.GENSAL",
                      "OpenIPSL.Examples.Machines.PSSE.GENSAE",
                      "OpenIPSL.Examples.Machines.PSSE.GENROU",
-                     "OpenIPSL.Examples.Machines.PSSE.GENROE"]
+                     "OpenIPSL.Examples.Machines.PSSE.GENROE",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.EXAC2",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.SEXS",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.SCRX",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.ESST1A",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.IEEEX1",
+                     "OpenIPSL.Examples.Controls.PSSE.ES.ESAC1A"]
 
         # cd to the repo folder to store simulation results next to the reference
         self.omc.sendExpression('cd("/OpenIPSL/CI")')
@@ -184,8 +190,9 @@ class CITests():
 
 libPath = "/OpenIPSL/OpenIPSL/package.mo"
 ci = CITests(libPath)
-passing = ci.runSW2SW()
+passingCheck = ci.runCheck()
+passingVal = ci.runSW2SW()
 
 # The tests are failing if the number of failed check > 0
-if not passing:
+if (not passingVal) or (not passingCheck):
     sys.exit(1)
