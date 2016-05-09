@@ -57,7 +57,10 @@ class CITests():
         print "======================= Running SW-to-SW Valiation ========================"
 
         # Create a list of models which will be sw-to-sw validated
-        test_list = ["OpenIPSL.Examples.Machines.PSSE.GENSAL"]
+        test_list = ["OpenIPSL.Examples.Machines.PSSE.GENSAL",
+                     "OpenIPSL.Examples.Machines.PSSE.GENSAE",
+                     "OpenIPSL.Examples.Machines.PSSE.GENROU",
+                     "OpenIPSL.Examples.Machines.PSSE.GENROE"]
 
         # cd to the repo folder to store simulation results next to the reference
         self.omc.sendExpression('cd("/OpenIPSL/CI")')
