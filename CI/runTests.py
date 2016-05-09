@@ -166,7 +166,7 @@ class CITests():
         return RMSE
 
     def plotComparison(self, X1, Y1, X2, Y2, sig_name):
-        lines = plt.plot(X1, Y1, 'b-', X1, Y2, 'r--')
+        lines = plt.plot(X1, Y1, 'b-', X2, Y2, 'r--')
 
         plt.setp(lines[0], linewidth=2, label='Modelica')
         plt.setp(lines[1], linewidth=2, label='PSS/E')
