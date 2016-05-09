@@ -78,7 +78,7 @@ class CITests():
                         # If RMSE is greater than 0.01 then fail the test
                         if RMSE >= 0.01:
                             result = False
-                        self.plotComparison(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
+                        # self.plotComparison(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
                 else:
                     print "Error - Model failed to simulate!"
             else:
