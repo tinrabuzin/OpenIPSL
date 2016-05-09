@@ -23,7 +23,6 @@ class CITests():
         else:
             raise Exception('OpenIPSL was not loaded! Check the library path.')
 
-
     def runCheck(self):
         '''
         Checks all of the models in the library and returns number of faild checks
@@ -62,19 +61,29 @@ class CITests():
 
         # cd to the repo folder to store simulation results next to the reference
         self.omc.sendExpression('cd("/OpenIPSL/CI")')
-
+        result = True
         for model in test_list:
+            print "[TEST]: %s" % (model)
             if self.omc.sendExpression("isModel(%s)" % (model)):
                 resultFile = self.simulateModel(model)
-                dataModelica = self.postProcessModelica(resultFile)
-                dataref = self.postProcessReference(model)
-                print "Signal RMSE values follow:"
-                for key in dataModelica.keys():
-                    RMSE = self.calculateRMSE(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
-                    print '%s - %s' % (key, RMSE)
+                if resultFile:
+                    # Postprocess Modelica and reference data
+                    dataModelica = self.postProcessModelica(resultFile)
+                    dataref = self.postProcessReference(model)
+                    # For each of the signals calculate RMSE values
+                    print "Signal RMSE values follow:"
+                    for key in dataModelica.keys():
+                        RMSE = self.calculateRMSE(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
+                        print '%s - %s' % (key, RMSE)
+                        # If RMSE is greater than 0.01 then fail the test
+                        if RMSE >= 0.01:
+                            result = False
+                        self.plotComparison(dataModelica['time'], dataModelica[key], dataref['time'], dataref[key], key)
+                else:
+                    print "Error - Model failed to simulate!"
             else:
                 print "Class %s is not a model! Continuing to the next class." % (model)
-        return dataModelica, dataref
+        return result
 
     def simulateModel(self, model):
         '''
@@ -87,7 +96,6 @@ class CITests():
         outputFormat = 'csv'
         tolerance = 1e-4
 
-        print "[TEST]: %s" % (model)
         answer = self.omc.sendExpression('simulate(%s, stopTime =%s, numerOfIntervals=%s, ' % (model, stopTime, stopTime/outputInterval)
                                          + 'tolerance=%s, method=%s, outputFormat="%s")' % (tolerance, method, outputFormat))
 
@@ -149,6 +157,7 @@ class CITests():
 
         # self.plotComparison(X1, Y1, X2, Y2, signal)
         '''
+        # Uncomment this to enable calculations of MASE
         suma = 0
         for i in range(0, len(Y1)-1):
                 suma = suma + np.absolute(Y2[i]-0.99*Y2[i])
@@ -169,8 +178,8 @@ class CITests():
 
 libPath = "/OpenIPSL/OpenIPSL/package.mo"
 ci = CITests(libPath)
-(mod, psse) = ci.runSW2SW()
+passing = ci.runSW2SW()
 
 # The tests are failing if the number of failed check > 0
-if False:
+if not passing:
     sys.exit(1)
