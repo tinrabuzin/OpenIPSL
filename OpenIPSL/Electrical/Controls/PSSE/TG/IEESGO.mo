@@ -55,32 +55,25 @@ equation
   connect(gain.y, add3_1.u1) annotation (Line(points={{87,24},{96,24},{96,-8},{104,-8}}, color={0,0,127}));
   connect(gain1.y, add3_1.u2) annotation (Line(points={{67,-16},{85.5,-16},{104,-16}}, color={0,0,127}));
   connect(imSimpleLag3.y, add3_1.u3) annotation (Line(points={{67,-56},{96,-56},{96,-24},{104,-24}}, color={0,0,127}));
-  connect(SPEED, imSimpleLag.u) annotation (Line(points={{-100,50},{-82,50},{
-          -82,48},{-70,48},{-70,30},{-126,30},{-126,4},{-116,4}}, color={0,0,
+  connect(SPEED, imSimpleLag.u) annotation (Line(points={{-240,-120},{-82,-120},
+          {-82,48},{-70,48},{-70,30},{-126,30},{-126,4},{-116,4}}, color={0,0,
           127}));
-  connect(PMECH0, add.u1) annotation (Line(points={{-100,-50},{-54,-50},{-54,30},
+  connect(PMECH0, add.u1) annotation (Line(points={{-240,80},{-54,80},{-54,30},
           {-46,30}}, color={0,0,127}));
   connect(add3_1.y, PMECH) annotation (Line(points={{127,-16},{132,-16},{132,
-          -14},{140,-14},{140,0},{110,0}}, color={0,0,127}));
+          -14},{140,-14},{140,0},{250,0}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-80},{160,60}}), graphics={Text(
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-240,-200},{
+            240,160}}),                                                                graphics={Text(
           extent={{-50,70},{46,18}},
           lineColor={0,0,255},
           textString="Pm0*(1-K_2)+Pm0*K_2*(1-K_3)+Pm0*K_3*K_2
 =0+0+0+Pm0")}),
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-80},{160,60}}), graphics={Rectangle(extent={{-160,60},{160,-80}}, lineColor={0,0,255}),Text(
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-240,-200},{240,
+            160}}),                                                                 graphics={                                                             Text(
           extent={{-52,20},{68,-20}},
-          lineColor={0,0,255},
-          textString="IEESGO"),Text(
-          extent={{-142,36},{-118,22}},
-          lineColor={0,0,255},
-          textString="SPEED"),Text(
-          extent={{-142,-32},{-116,-48}},
-          lineColor={0,0,255},
-          textString="PMECH0"),Text(
-          extent={{134,6},{156,-6}},
-          lineColor={0,0,255},
-          textString="PMECH")}),
+          lineColor={28,108,200},
+          textString="IEESGO")}),
     Documentation(revisions="<html>
 <!--DISCLAIMER-->
 <p>OpenIPSL:</p>
