@@ -1,5 +1,6 @@
 within OpenIPSL.Electrical.Controls.PSSE.TG;
 model HYGOV
+  extends BaseClasses.BaseGovernor;
   parameter Real R=0.05 "Permanent droop (pu)";
   parameter Real r=0.3 "Temporary droop (pu)";
   parameter Real T_r=5 "Governor time constant (s)";
@@ -13,8 +14,6 @@ model HYGOV
   parameter Real D_turb=0.2 "Turbine damping";
   parameter Real q_NL=0.08 "Water flow at no load";
   Modelica.Blocks.Sources.Constant n_ref(k=nref) annotation (Placement(transformation(extent={{-178,14},{-166,26}})));
-  Modelica.Blocks.Interfaces.RealInput SPEED "Machine speed deviation from nominal (pu)"
-    annotation (Placement(transformation(extent={{-206,-10},{-192,4}}), iconTransformation(extent={{-84,24},{-72,36}})));
   OpenIPSL.NonElectrical.Continuous.SimpleLag SimpleLag1(
     K=1,
     T=T_f,
@@ -28,13 +27,10 @@ model HYGOV
     k=1/T_w) annotation (Placement(transformation(extent={{62,-4},{74,8}})));
   Modelica.Blocks.Sources.Constant qNL(k=q_NL) annotation (Placement(transformation(extent={{92,-18},{84,-10}})));
   Modelica.Blocks.Math.Gain Gain6(k=A_t) annotation (Placement(transformation(extent={{132,-2},{144,10}})));
-  Modelica.Blocks.Interfaces.RealOutput PMECH "Turbine mechanical power (pu)" annotation (Placement(transformation(extent={{170,-6},{182,6}}), iconTransformation(extent={{80,-4},{88,4}})));
   OpenIPSL.NonElectrical.Continuous.SimpleLag g(
     K=1,
     T=T_g,
     y_start=g0) "servo_motor" annotation (Placement(transformation(extent={{-40,0},{-28,12}})));
-  Modelica.Blocks.Interfaces.RealInput PMECH0 "Initial turbine mechanical power (pu)"
-    annotation (Placement(transformation(extent={{-84,-62},{-76,-52}}), iconTransformation(extent={{-84,-36},{-72,-24}})));
   Modelica.Blocks.Nonlinear.Limiter Velocity_Limiter(uMin=-VELM, uMax=VELM) annotation (Placement(transformation(extent={{-86,0},{-74,12}})));
   Modelica.Blocks.Continuous.LimIntegrator Position_Limiter(
     outMin=G_MIN,
@@ -90,9 +86,7 @@ equation
   connect(add.y, SimpleLag1.u) annotation (Line(points={{-131.4,6},{-127.2,6}}, color={0,0,127}));
   connect(n_ref.y, add.u1) annotation (Line(points={{-165.4,20},{-152,20},{-152,9.6},{-145.2,9.6}}, color={0,0,127}));
   connect(add1.y, add.u2) annotation (Line(points={{-155.4,-6},{-150,-6},{-150,2.4},{-145.2,2.4}}, color={0,0,127}));
-  connect(add1.u1, SPEED) annotation (Line(points={{-169.2,-2.4},{-177.6,-2.4},{-177.6,-3},{-199,-3}}, color={0,0,127}));
   connect(Gain3.y, add1.u2) annotation (Line(points={{-142.6,-16},{-178,-16},{-178,-9.6},{-169.2,-9.6}}, color={0,0,127}));
-  connect(Gain4.u, SPEED) annotation (Line(points={{-63.2,-28},{-188,-28},{-188,-3},{-199,-3}}, color={0,0,127}));
   connect(Velocity_Limiter.y, Position_Limiter.u) annotation (Line(points={{-73.4,6},{-69.2,6}}, color={0,0,127}));
   connect(Position_Limiter.y, Gain3.u) annotation (Line(points={{-55.4,6},{-52,6},{-52,-16},{-128.8,-16}}, color={0,0,127}));
   connect(g.u, Gain3.u) annotation (Line(points={{-41.2,6},{-52,6},{-52,-16},{-128.8,-16}}, color={0,0,127}));
@@ -105,7 +99,6 @@ equation
   connect(qNL.y, add3.u2) annotation (Line(points={{83.6,-14},{76,-14},{76,-1.6},{80.8,-1.6}}, color={0,0,127}));
   connect(Gain4.y, product1.u2) annotation (Line(points={{-49.4,-28},{4,-28},{4,-27.6},{56.8,-27.6}}, color={0,0,127}));
   connect(product1.y, add4.u2) annotation (Line(points={{70.6,-24},{144,-24},{144,-3.6},{150.8,-3.6}}, color={0,0,127}));
-  connect(add4.y, PMECH) annotation (Line(points={{164.6,0},{176,0}}, color={0,0,127}));
   connect(product1.u1, g.y) annotation (Line(points={{56.8,-20.4},{-16,-20.4},{-16,6},{-27.4,6}}, color={0,0,127}));
   connect(division.u2, g.y) annotation (Line(points={{-1.2,-1.6},{-16,-1.6},{-16,6},{-27.4,6}}, color={0,0,127}));
   connect(division.u1, add3.u1) annotation (Line(points={{-1.2,5.6},{-6,5.6},{-6,20},{76,20},{76,5.6},{80.8,5.6}}, color={0,0,127}));
@@ -115,8 +108,15 @@ equation
   connect(product2.u1, add2.u1) annotation (Line(points={{106.8,7.6},{100,7.6},{100,16},{36,16},{36,5.6},{40.8,5.6}}, color={0,0,127}));
   connect(simpleLead.y, Velocity_Limiter.u) annotation (Line(points={{-93.4,6},{-87.2,6}}, color={0,0,127}));
   connect(simpleLead.u, SimpleLag1.y) annotation (Line(points={{-107.2,6},{-113.4,6}}, color={0,0,127}));
+  connect(add4.y, PMECH)
+    annotation (Line(points={{164.6,0},{250,0},{250,0}}, color={0,0,127}));
+  connect(SPEED, add1.u1) annotation (Line(points={{-240,-120},{-200,-120},{
+          -200,-2.4},{-169.2,-2.4}}, color={0,0,127}));
+  connect(Gain4.u, add1.u1) annotation (Line(points={{-63.2,-28},{-200,-28},{
+          -200,-2.4},{-169.2,-2.4}}, color={0,0,127}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-80,-60},{80,60}}), graphics={Rectangle(
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-240,-200},{
+            240,160}}),                                                              graphics={Rectangle(
           extent={{-190,32},{-12,-38}},
           lineColor={255,128,0},
           pattern=LinePattern.Dash,
@@ -133,21 +133,11 @@ equation
           lineColor={85,170,255},
           textStyle={TextStyle.Bold},
           textString="Hydrauli Turbine System")}),
-    Icon(coordinateSystem(extent={{-80,-60},{80,60}}, preserveAspectRatio=false), graphics={Text(
-          extent={{-48,12},{52,-14}},
-          lineColor={0,0,255},
-          fillPattern=FillPattern.Solid,
-          textString="HYGOV"),Text(
-          extent={{-70,-20},{-42,-40}},
-          lineColor={0,0,255},
-          fillPattern=FillPattern.Solid,
-          textString="PMECH0"),Rectangle(extent={{-80,60},{80,-60}}, lineColor={0,0,255}),Text(
-          extent={{-78,34},{-40,26}},
-          lineColor={0,0,255},
-          textString="SPEED"),Text(
-          extent={{52,6},{78,-8}},
-          lineColor={0,0,255},
-          textString="PMECH")}),
+    Icon(coordinateSystem(extent={{-240,-200},{240,160}},
+                                                      preserveAspectRatio=false), graphics={Text(
+          extent={{-60,16},{64,-24}},
+          lineColor={28,108,200},
+          textString="HYGOV")}),
     Documentation(revisions="<html>
 <!--DISCLAIMER-->
 <p>OpenIPSL:</p>
@@ -176,4 +166,3 @@ equation
 </html>
 "));
 end HYGOV;
-
