@@ -143,7 +143,8 @@ equation
   connect(LD2.p, B4.p) annotation (Line(points={{100,-59.4},{100,-24},{80,-24},{80,-20}}, color={0,0,255}));
   connect(G2.conn, B5.p) annotation (Line(points={{60,-69},{60,-60}}, color={0,0,255}));
   connect(LD1.p, B2.p) annotation (Line(points={{-6,0.6},{-6,40},{0,40}}, color={0,0,255}));
-  connect(L3.n, breaker1.n) annotation (Line(points={{80,3},{80,-5.5}}, color={0,0,255}));
+  connect(L3.n, breaker1.n) annotation (Line(points={{80,4.6},{80,-5.5}},
+                                                                        color={0,0,255}));
   connect(B4.p, breaker1.p) annotation (Line(points={{80,-20},{80,-14.5}}, color={0,0,255}));
   connect(V_DN, G2.V_DN) annotation (Line(points={{80,-110},{80,-110},{80,-96},{66,-96},{66,-89.8},{65,-89.8}}, color={0,0,127}));
   connect(V_IB, G2.V_IB) annotation (Line(points={{40,-110},{40,-96},{55,-96},{55,-89.8}}, color={0,0,127}));
