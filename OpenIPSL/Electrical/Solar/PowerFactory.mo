@@ -4,11 +4,11 @@ package PowerFactory
   package ElmModels
     model ElmGenstat
       extends OpenIPSL.Electrical.Essentials.pfComponent(final enabledisplayPF = false, final enablefn = true, final enableV_b = false, final enableangle_0 = true, final enablev_0 = true, final enableQ_0 = true, final enableP_0 = true, final enableS_b = true);
-      Real anglev;
-      Real anglei;
-      Real Vt;
-      Real Q(start = Q_0 / S_b, fixed=true);
-      Real P(start = P_0 / S_b, fixed=true);
+      //Real anglev;
+      //Real anglei;
+      //Real Vt;
+      Real Q;
+      Real P;
       Modelica.Blocks.Interfaces.RealInput id_ref annotation(
         Placement(visible = true, transformation(origin = {-108, 70}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-100, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Interfaces.RealInput iq_ref annotation(
@@ -21,16 +21,15 @@ package PowerFactory
         Placement(transformation(extent = {{90, -10}, {110, 10}})));
       Modelica.Blocks.Interfaces.RealOutput It annotation(
         Placement(visible = true, transformation(origin = {110, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    protected
     equation
       p.ir = -(id_ref * cosref - iq_ref * sinref);
       p.ii = -(id_ref * sinref + iq_ref * cosref);
       -P = p.vr * p.ir + p.vi * p.ii;
       -Q = p.vi * p.ir - p.vr * p.ii;
-      Vt = sqrt(p.vr ^ 2 + p.vi ^ 2);
-      anglev = atan2(p.vi, p.vr);
+//Vt = sqrt(p.vr ^ 2 + p.vi ^ 2);
+//anglev = atan2(p.vi, p.vr);
       It = sqrt(p.ii ^ 2 + p.ir ^ 2);
-      anglei = atan2(p.ii, p.ir);
+      //anglei = atan2(p.ii, p.ir);
       annotation(
         Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, -100}, {100, 100}}), Text(origin = {-69.7, 70.01}, fillPattern = FillPattern.Solid, extent = {{-12.3, -8.18}, {12.3, 8.18}}, textString = "id_ref", fontName = "Arial"), Text(origin = {-63.7, 29.82}, fillPattern = FillPattern.Solid, extent = {{-12.3, -8.18}, {12.3, 8.18}}, textString = "iq_ref", fontName = "Arial"), Text(origin = {24.07, -72.08}, fillPattern = FillPattern.Solid, extent = {{-124.07, -27.92}, {76.07, -8.08}}, textString = "ElmStatgen", fontName = "Arial"), Text(origin = {-63.7, -72.18}, fillPattern = FillPattern.Solid, extent = {{-12.3, -8.18}, {14.3, 8.18}}, textString = "cosref", fontName = "Arial"), Text(origin = {-63.7, -20.18}, fillPattern = FillPattern.Solid, extent = {{-12.3, -8.18}, {12.3, 8.18}}, textString = "sinref", fontName = "Arial"), Ellipse(origin = {50, -48}, fillColor = {215, 215, 215}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {-2, -2}}, endAngle = 360), Line(origin = {-0.000710326, 0.400639}, points = {{0, -25}, {0, 25}}, arrow = {Arrow.None, Arrow.Filled}, arrowSize = 10)}, coordinateSystem(initialScale = 0.1)),
         Diagram,
@@ -68,8 +67,8 @@ package PowerFactory
       Real cosphi;
       Real sinphi;
     initial equation
-    der(cosphi) = 0;
-    der(sinphi) = 0;
+    cosphi = p.vr/sqrt(p.vr ^ 2 + p.vi ^ 2);
+    sinphi = p.vi/sqrt(p.vr ^ 2 + p.vi ^ 2);
     equation
       u = sqrt(p.vr ^ 2 + p.vi ^ 2);
       der(cosphi) = (p.vr / u - cosphi) / Tfe;
@@ -127,7 +126,7 @@ package PowerFactory
       Modelica.Blocks.Math.Division division1 annotation(
         Placement(visible = true, transformation(origin = {90, 30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Continuous.FirstOrder PCurrentController(T = Tg, initType = Modelica.Blocks.Types.Init.InitialOutput, k = 1, y_start = Pref / u_0) annotation(
-        Placement(visible = true, transformation(origin = {170, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(visible = true, transformation(origin = {182, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Continuous.FirstOrder QCurrentController(T = Tg, initType = Modelica.Blocks.Types.Init.InitialOutput, k = -1, y_start = -Qref / u_0) annotation(
         Placement(visible = true, transformation(origin = {170, -70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Blocks.Interfaces.RealInput freq annotation(
@@ -161,20 +160,12 @@ package PowerFactory
       parameter SI.PerUnit Qref;
       parameter SI.PerUnit Pref;
       parameter SI.PerUnit u_0;
-      OpenIPSL.Electrical.Solar.PowerFactory.WECC.GenerationTripping frequency_protection(Lv0 = Ft0, Lv1 = Ft1, Lv2 = Ft2, Lv3 = Ft3, recov = fr_recov) annotation(
-        Placement(visible = true, transformation(origin = {10, 130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Product product annotation(
-        Placement(visible = true, transformation(origin = {50, 130}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Product product1 annotation(
-        Placement(visible = true, transformation(origin = {130, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      OpenIPSL.Electrical.Solar.PowerFactory.WECC.GenerationTripping generationTripping(Lv0 = Vt0, Lv1 = Vt1, Lv2 = Vt2, Lv3 = Vt3, recov = vr_recov) annotation(
-        Placement(visible = true, transformation(origin = {10, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Product product2 annotation(
-        Placement(visible = true, transformation(origin = {50, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Product product3 annotation(
-        Placement(visible = true, transformation(origin = {90, 110}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Math.Product product4 annotation(
-        Placement(visible = true, transformation(origin = {130, -70}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Product product1 annotation(
+        Placement(visible = true, transformation(origin = {150, 90}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Math.Product product annotation(
+        Placement(visible = true, transformation(origin = {70,150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  OpenIPSL.Electrical.Solar.PowerFactory.WECC.GenerationTripping frequency_tripping(Lv0 = Ft0, Lv1 = Ft1, Lv2 = Ft2, Lv3 = Ft3, recov = fr_recov)  annotation(
+        Placement(visible = true, transformation(origin = {30, 150}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     equation
       connect(It, compensation.u) annotation(
         Line(points = {{-200, -70}, {-162, -70}}, color = {0, 0, 127}));
@@ -215,41 +206,27 @@ package PowerFactory
       connect(QCurrentController.y, Iq) annotation(
         Line(points = {{181, -70}, {210, -70}}, color = {0, 0, 127}));
       connect(PCurrentController.y, Ip) annotation(
-        Line(points = {{181, 90}, {210, 90}}, color = {0, 0, 127}));
+        Line(points = {{193, 90}, {210, 90}}, color = {0, 0, 127}));
       connect(active_power_reference.y, add4.u2) annotation(
         Line(points = {{-138, 30}, {-80, 30}, {-80, 44}, {-62, 44}, {-62, 44}}, color = {0, 0, 127}));
       connect(frequency_droop.y, add4.u1) annotation(
         Line(points = {{-38, 144}, {-34, 144}, {-34, 104}, {-80, 104}, {-80, 56}, {-62, 56}, {-62, 56}}, color = {0, 0, 127}));
       connect(add4.y, division1.u1) annotation(
         Line(points = {{-38, 50}, {52, 50}, {52, 36}, {78, 36}, {78, 36}}, color = {0, 0, 127}));
-      connect(freq, frequency_protection.u) annotation(
-        Line(points = {{-200, 150}, {-184, 150}, {-184, 180}, {-8, 180}, {-8, 129}, {0, 129}, {0, 130}}, color = {0, 0, 127}));
-      connect(frequency_protection.TrpLow, product.u1) annotation(
-        Line(points = {{21, 135}, {41.75, 135}, {41.75, 136}, {38, 136}}, color = {0, 0, 127}));
-      connect(frequency_protection.TrpHigh, product.u2) annotation(
-        Line(points = {{21, 125}, {41.75, 125}, {41.75, 124}, {38, 124}}, color = {0, 0, 127}));
+      connect(qppriority.Iqcmd, QCurrentController.u) annotation(
+        Line(points = {{142, -4}, {150, -4}, {150, -70}, {158, -70}, {158, -70}, {158, -70}}, color = {0, 0, 127}));
       connect(product1.y, PCurrentController.u) annotation(
-        Line(points = {{142, 90}, {158, 90}, {158, 90}, {158, 90}}, color = {0, 0, 127}));
-      connect(qppriority.Ipcmd, product1.u2) annotation(
-        Line(points = {{142, 6}, {148, 6}, {148, 60}, {100, 60}, {100, 84}, {118, 84}, {118, 84}}, color = {0, 0, 127}));
-      connect(generationTripping.u, Vt) annotation(
-        Line(points = {{0, 90}, {-128, 90}, {-128, -10}, {-200, -10}}, color = {0, 0, 127}));
-      connect(generationTripping.TrpLow, product2.u1) annotation(
-        Line(points = {{21, 95}, {38, 95}, {38, 96}}, color = {0, 0, 127}));
-      connect(generationTripping.TrpHigh, product2.u2) annotation(
-        Line(points = {{21, 85}, {30.5, 85}, {30.5, 87}, {38, 87}, {38, 84}}, color = {0, 0, 127}));
-      connect(product3.y, product1.u1) annotation(
-        Line(points = {{102, 110}, {108, 110}, {108, 96}, {118, 96}, {118, 96}}, color = {0, 0, 127}));
-      connect(product3.u1, product.y) annotation(
-        Line(points = {{78, 116}, {70, 116}, {70, 130}, {62, 130}, {62, 130}}, color = {0, 0, 127}));
-      connect(product3.u2, product2.y) annotation(
-        Line(points = {{78, 104}, {70, 104}, {70, 90}, {62, 90}, {62, 90}}, color = {0, 0, 127}));
-      connect(product4.y, QCurrentController.u) annotation(
-        Line(points = {{142, -70}, {156, -70}, {156, -70}, {158, -70}}, color = {0, 0, 127}));
-      connect(qppriority.Iqcmd, product4.u1) annotation(
-        Line(points = {{142, -4}, {150, -4}, {150, -40}, {112, -40}, {112, -64}, {118, -64}, {118, -64}}, color = {0, 0, 127}));
-      connect(product4.u2, product3.y) annotation(
-        Line(points = {{118, -76}, {102, -76}, {102, 110}, {102, 110}}, color = {0, 0, 127}));
+        Line(points = {{162, 90}, {170, 90}, {170, 90}, {170, 90}}, color = {0, 0, 127}));
+      connect(product1.u2, qppriority.Ipcmd) annotation(
+        Line(points = {{138, 84}, {126, 84}, {126, 20}, {144, 20}, {144, 6}, {142, 6}, {142, 6}}, color = {0, 0, 127}));
+  connect(product.y, product1.u1) annotation(
+        Line(points = {{82, 150}, {120, 150}, {120, 96}, {138, 96}, {138, 96}}, color = {0, 0, 127}));
+  connect(frequency_tripping.TrpLow, product.u1) annotation(
+        Line(points = {{42, 156}, {58, 156}, {58, 156}, {58, 156}}, color = {0, 0, 127}));
+  connect(frequency_tripping.TrpHigh, product.u2) annotation(
+        Line(points = {{42, 144}, {58, 144}, {58, 144}, {58, 144}}, color = {0, 0, 127}));
+  connect(frequency_tripping.u, freq) annotation(
+        Line(points = {{20, 150}, {0, 150}, {0, 184}, {-188, 184}, {-188, 150}, {-200, 150}}, color = {0, 0, 127}));
     protected
       annotation(
         Diagram(coordinateSystem(extent = {{-200, -200}, {200, 200}}, initialScale = 0.05), graphics = {Text(origin = {-186, 179}, lineColor = {255, 0, 0}, extent = {{-8, 3}, {76, -9}}, textString = "Frequency filtering has to be done outside of this block", horizontalAlignment = TextAlignment.Left), Rectangle(origin = {-67, 141}, lineColor = {0, 170, 0}, pattern = LinePattern.Dash, lineThickness = 1, extent = {{-85, 21}, {51, -45}}), Text(origin = {-186, 179}, lineColor = {255, 0, 0}, extent = {{-8, 3}, {76, -9}}, textString = "Frequency filtering has to be done outside of this block", horizontalAlignment = TextAlignment.Left), Text(origin = {-186, 179}, lineColor = {255, 0, 0}, extent = {{-8, 3}, {76, -9}}, textString = "Frequency filtering has to be done outside of this block", horizontalAlignment = TextAlignment.Left), Text(origin = {-92, 171}, lineColor = {0, 170, 0}, lineThickness = 1, extent = {{-8, 3}, {76, -9}}, textString = "Underfrequency Droop Control", horizontalAlignment = TextAlignment.Left), Rectangle(origin = {-67, 141}, lineColor = {0, 170, 0}, pattern = LinePattern.Dash, lineThickness = 1, extent = {{-85, 21}, {51, -45}}), Rectangle(origin = {-5, -71}, lineColor = {0, 170, 0}, pattern = LinePattern.Dash, lineThickness = 1, extent = {{-85, 21}, {79, -57}}), Text(origin = {-120, -41}, lineColor = {0, 170, 0}, lineThickness = 1, extent = {{30, -1}, {76, -9}}, textString = "Volt/Var Control", horizontalAlignment = TextAlignment.Left)}),
@@ -328,30 +305,34 @@ package PowerFactory
       parameter Real Lv2;
       parameter Real Lv3;
       parameter Real recov;
+      parameter Real Tfilter=1e-2 "Best to set about the time step value for fixed-step solvers";
       Modelica.Blocks.Interfaces.RealInput u annotation(
         Placement(visible = true, transformation(origin = {-100, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-100, 0}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-      Modelica.Blocks.Interfaces.RealOutput TrpLow(start = 1) annotation(
+      Modelica.Blocks.Interfaces.RealOutput TrpLow annotation(
         Placement(visible = true, transformation(origin = {110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Blocks.Interfaces.RealOutput TrpHigh(start = 1) annotation(
+      Modelica.Blocks.Interfaces.RealOutput TrpHigh annotation(
         Placement(visible = true, transformation(origin = {110, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Real umin;
       Real umax;
     initial equation
-      umin = u;
-      umax = u;
+    umin = u;
+    umax = u;
+    //umax = u;
+    //umax = -Modelica.Constants.inf;
     equation
-// Tracking the minimum and maximum input constrained by the Lv0 and Lv3, respectively
-      der(umin) = if u < umin and umin > Lv0 then min(0, der(u)) else 0;
-      der(umax) = if u > umax and umax < Lv3 then max(0, der(u)) else 0;
-// Tripping for low values of the input signal
-      if u < Lv0 then
+    // Tracking the minimum and maximum input constrained by the Lv0 and Lv3, respectively
+    umin + Tfilter*der(umin) = if u < umin and umin > Lv0 then u else umin;
+    umax + Tfilter*der(umax) = if u > umax and umax < Lv3 then u else umax;
+    
+    // Tripping for low values of the input signal
+    if u < Lv0 then
         TrpLow = 0.0;
       elseif u < Lv1 then
         TrpLow = (umin - Lv0 + (if u <= umin then 0 else recov * (u - umin))) / (Lv1 - Lv0);
       else
         TrpLow = if umin >= Lv1 then 1.0 else (umin - Lv0 + recov * (Lv1 - umin)) / (Lv1 - Lv0);
       end if;
-// Tripping for high values of the input signal
+    // Tripping for high values of the input signal
       if u > Lv3 then
         TrpHigh = 0;
       elseif u > Lv2 then
@@ -370,34 +351,34 @@ package PowerFactory
       Placement(visible = true, transformation(origin = {40, -2.88658e-15}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
     OpenIPSL.Interfaces.PwPin p annotation(
       Placement(visible = true, transformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {110, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    OpenIPSL.Electrical.Solar.PowerFactory.ElmModels.StaVmeas staVmeas(Tfe = 3 / fn, fn = fn) annotation(
+    OpenIPSL.Electrical.Solar.PowerFactory.ElmModels.StaVmeas staVmeas(Tfe = 3 / fn, fn = 50) annotation(
       Placement(visible = true, transformation(origin = {-10, 50}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
     OpenIPSL.Electrical.Solar.PowerFactory.WECC.PVD1 controller( Imax = 1.1, PqFlag = true, Pref = P_0 / S_b, Qref = Q_0 / S_b, fn = 1, fr_recov = 1, u_0 = v_0, vr_recov = 0) annotation(
       Placement(visible = true, transformation(origin = {-30, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    OpenIPSL.Electrical.Solar.PowerFactory.WECC.ElmPhi_pll pll annotation(
+    OpenIPSL.Electrical.Solar.PowerFactory.WECC.ElmPhi_pll pll  annotation(
       Placement(visible = true, transformation(origin = {30, -50}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   equation
-    connect(StaticGenerator.p, p) annotation(
-      Line(points = {{60, 0}, {110, 0}}, color = {0, 0, 255}));
-    connect(staVmeas.p, p) annotation(
-      Line(points = {{2, 50}, {80, 50}, {80, 0}, {110, 0}, {110, 0}}, color = {0, 0, 255}));
     connect(staVmeas.u, controller.Vt) annotation(
-      Line(points = {{-20, 56}, {-50, 56}, {-50, 16}, {-40, 16}, {-40, 17}}, color = {0, 0, 127}));
-    connect(staVmeas.fe, controller.freq) annotation(
-      Line(points = {{-20, 46}, {-46, 46}, {-46, 6}, {-40, 6}, {-40, 7}}, color = {0, 0, 127}));
-    connect(StaticGenerator.It, controller.It) annotation(
-      Line(points = {{62, 14}, {70, 14}, {70, 24}, {-44, 24}, {-44, 13}, {-40, 13}}, color = {0, 0, 127}));
-    connect(pll.p, p) annotation(
-      Line(points = {{42, -50}, {80, -50}, {80, 0}, {104, 0}, {104, 0}, {110, 0}}, color = {0, 0, 255}));
-    connect(pll.sinphi, StaticGenerator.cosref) annotation(
-      Line(points = {{20, -44}, {6, -44}, {6, -4}, {20, -4}, {20, -4}}, color = {0, 0, 127}));
-    connect(pll.cosphi, StaticGenerator.sinref) annotation(
-      Line(points = {{20, -52}, {12, -52}, {12, -14}, {20, -14}, {20, -14}}, color = {0, 0, 127}));
-    connect(controller.Ip, StaticGenerator.id_ref) annotation(
+      Line(points = {{-20, 56}, {-46, 56}, {-46, 18}, {-40, 18}, {-40, 18}}, color = {0, 0, 127}));
+  connect(staVmeas.fe, controller.freq) annotation(
+      Line(points = {{-20, 46}, {-56, 46}, {-56, 6}, {-40, 6}, {-40, 8}}, color = {0, 0, 127}));
+  connect(controller.It, StaticGenerator.It) annotation(
+      Line(points = {{-40, 14}, {-48, 14}, {-48, 24}, {68, 24}, {68, 14}, {62, 14}, {62, 14}}, color = {0, 0, 127}));
+  connect(controller.Ip, StaticGenerator.id_ref) annotation(
       Line(points = {{-20, 16}, {20, 16}, {20, 14}, {20, 14}}, color = {0, 0, 127}));
-    connect(controller.Iq, StaticGenerator.iq_ref) annotation(
-      Line(points = {{-20, 6}, {18, 6}, {18, 6}, {20, 6}}, color = {0, 0, 127}));
+  connect(controller.Iq, StaticGenerator.iq_ref) annotation(
+      Line(points = {{-20, 6}, {20, 6}, {20, 6}, {20, 6}}, color = {0, 0, 127}));
+  connect(pll.sinphi, StaticGenerator.cosref) annotation(
+      Line(points = {{20, -44}, {6, -44}, {6, -4}, {20, -4}, {20, -4}}, color = {0, 0, 127}));
+  connect(pll.cosphi, StaticGenerator.sinref) annotation(
+      Line(points = {{20, -52}, {12, -52}, {12, -14}, {20, -14}, {20, -14}}, color = {0, 0, 127}));
+  connect(StaticGenerator.p, p) annotation(
+      Line(points = {{60, 0}, {106, 0}, {106, 0}, {110, 0}}, color = {0, 0, 255}));
+  connect(pll.p, p) annotation(
+      Line(points = {{42, -50}, {80, -50}, {80, -2}, {110, -2}, {110, 0}}, color = {0, 0, 255}));
+  connect(staVmeas.p, p) annotation(
+      Line(points = {{2, 50}, {80, 50}, {80, 6}, {110, 6}, {110, 0}}, color = {0, 0, 255}));
     annotation(
-      Icon(graphics = {Ellipse(origin = {50, -48}, fillColor = {215, 215, 215}, fillPattern = FillPattern.Solid, extent = {{-150, 148}, {50, -52}}, endAngle = 360), Line(origin = {-0.22, 25.23}, points = {{0, -83}, {0, 25}}, thickness = 1, arrow = {Arrow.None, Arrow.Filled}, arrowSize = 10)}, coordinateSystem(initialScale = 0.1)));
+      Icon(graphics = {Ellipse(origin = {50, -48}, fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-150, 148}, {50, -52}}, endAngle = 360), Line(origin = {-0.0673837, 60.7896}, points = {{0, -83}, {0, 25}}, arrow = {Arrow.None, Arrow.Filled}, arrowSize = 10), Text(origin = {-1, -52}, extent = {{-65, 12}, {65, -12}}, textString = "%name")}, coordinateSystem(initialScale = 0.1)));
   end SolarPlantPVD1;
 end PowerFactory;
