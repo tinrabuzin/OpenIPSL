@@ -1,6 +1,7 @@
-within OpenIPSL.Electrical.Solar.KTH.PFblocks;
+within OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks;
 model PVnew
-  OpenIPSL.Electrical.Solar.KTH.Auxiliary.PVarray PVarray1(
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.PVarray
+    PVarray1(
     Estc=Estc,
     Imp=Imp,
     Iscref=Iscref,
@@ -8,9 +9,8 @@ model PVnew
     Kv=Kv,
     Tstc=Tstc,
     Vmp=Vmp,
-    Vocref=Vocref) annotation (Placement(transformation(
-        origin={-10.0,5.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
+    Vocref=Vocref) annotation (Placement(transformation(origin={-10.0,5.0},
+          extent={{-10.0,-10.0},{10.0,10.0}})));
   Modelica.Blocks.Interfaces.RealInput E annotation (Placement(
       transformation(
         origin={-170.0,10.0},

@@ -1,4 +1,4 @@
-within OpenIPSL.Electrical.Solar.KTH.PFblocks;
+within OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks;
 model MPPT
   Modelica.Blocks.Interfaces.RealOutput Vdref(start=700) annotation (Placement(
       transformation(
@@ -33,10 +33,9 @@ model MPPT
   Modelica.Blocks.Math.Add add2(k2=-1) annotation (Placement(transformation(
         origin={-1.9703,-25.0},
         extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.Auxiliary.InputSelectorEpsilon
-    inputSelectorEpsilon1 annotation (Placement(transformation(
-        origin={65.0,5.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.InputSelectorEpsilon
+    inputSelectorEpsilon1 annotation (Placement(transformation(origin={65.0,5.0},
+          extent={{-10.0,-10.0},{10.0,10.0}})));
   Modelica.Blocks.Math.Gain gain1(k=Vmpp0_array*Tdelay/Step) annotation (
       Placement(transformation(
         origin={95.0,5.0},

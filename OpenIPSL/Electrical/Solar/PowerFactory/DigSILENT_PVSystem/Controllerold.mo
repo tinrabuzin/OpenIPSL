@@ -1,5 +1,5 @@
-within OpenIPSL.Electrical.Solar.KTH.PFblocks;
-model Controller
+within OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem;
+model Controllerold
   parameter Real v0=1;
   parameter Real ibase=1.02;
   parameter Real ibase_iq=1;
@@ -75,26 +75,25 @@ model Controller
       iconTransformation(
         origin={110.0,-48.2723},
         extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.Auxiliary.PI PI2(
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.PI
+    PI2(
     K=Kdc,
     T=Tdc,
     xo=xd,
     Ymax=id_max,
-    Ymin=id_min) annotation (Placement(transformation(
-        origin={-50.0,-65.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.Auxiliary.PI PI3(
+    Ymin=id_min) annotation (Placement(transformation(origin={-50.0,-65.0},
+          extent={{-10.0,-10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.PI
+    PI3(
     K=Kac,
     T=0.0005,
     Ymax=iq_max,
     Ymin=iq_min,
-    xo=xq) annotation (Placement(transformation(
-        origin={-65.0,47.5332},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.Auxiliary.SimpleLagg simpleLagg1(xo=v0)
-    annotation (Placement(transformation(
-        origin={-132.2917,60.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
+    xo=xq) annotation (Placement(transformation(origin={-65.0,47.5332}, extent=
+            {{-10.0,-10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.SimpleLagg
+    simpleLagg1(xo=v0) annotation (Placement(transformation(origin={-132.2917,
+            60.0}, extent={{-10.0,-10.0},{10.0,10.0}})));
 equation
   connect(id_ref, gain1.y) annotation (Line(
       origin={97.9312,-8.9184},
@@ -221,4 +220,4 @@ equation
 </tr>
 </table>
 </html>"));
-end Controller;
+end Controllerold;

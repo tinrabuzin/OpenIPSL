@@ -1,40 +1,35 @@
-within OpenIPSL.Electrical.Solar.KTH.Auxiliary;
-model SimpleLagg
-  Modelica.Blocks.Interfaces.RealInput yi annotation (Placement(
+within OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary;
+model AtoPU
+  Modelica.Blocks.Interfaces.RealOutput y0 annotation (Placement(
       transformation(
-        origin={-137.6396,33.4951},
-        extent={{-20.0,-20.0},{20.0,20.0}}),
-      iconTransformation(
-        origin={-120.0,0.0},
-        extent={{-20.0,-20.0},{20.0,20.0}})));
-  Modelica.Blocks.Interfaces.RealOutput yo annotation (Placement(
-      transformation(
-        origin={105.0,35.0},
+        origin={155.0,-0.0},
         extent={{-10.0,-10.0},{10.0,10.0}}),
       iconTransformation(
         origin={110.0,0.0},
         extent={{-10.0,-10.0},{10.0,10.0}})));
-  parameter Real T=0.002;
-  parameter Real xo;
-  Real x(start=xo);
+  Modelica.Blocks.Interfaces.RealInput yi annotation (Placement(
+      transformation(
+        origin={-155.0,0.0},
+        extent={{-20.0,-20.0},{20.0,20.0}}),
+      iconTransformation(
+        origin={-120.0,-0.0},
+        extent={{-20.0,-20.0},{20.0,20.0}})));
+  parameter Real Pnen;
+  parameter Real UdcN;
 equation
-  der(x) = (yi - x)/T;
-  yo = x;
+  y0 = yi/Pnen*1000/UdcN;
   annotation (
     Icon(coordinateSystem(
         extent={{-100.0,-100.0},{100.0,100.0}},
         preserveAspectRatio=true,
         grid={10,10}), graphics={Text(
-          origin={-13.5393,7.4321},
+          origin={1.9581,1.6889},
           fillPattern=FillPattern.Solid,
-          extent={{-43.5393,-25.2692},{43.5393,25.2692}},
-          textString="SimpleLagg",
+          extent={{-31.9581,-31.6889},{31.9581,31.6889}},
+          textString="A_to_pu",
           fontName="Arial"),Rectangle(
           fillColor={255,255,255},
-          extent={{-100.0,-100.0},{100.0,100.0}}),Rectangle(
-          origin={151.9125,3.2701},
-          fillColor={255,255,255},
-          extent={{-0.2973,-3.2701},{0.2973,3.2701}})}),
+          extent={{-100.0,-100.0},{100.0,100.0}})}),
     Diagram(coordinateSystem(
         extent={{-148.5,-105.0},{148.5,105.0}},
         preserveAspectRatio=true,
@@ -59,4 +54,4 @@ equation
 </tr>
 </table>
 </html>"));
-end SimpleLagg;
+end AtoPU;

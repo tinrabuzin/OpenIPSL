@@ -1,18 +1,16 @@
-within OpenIPSL.Electrical.Solar.KTH;
+within OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks;
 model PFmodelmpptCorrected05MW
   parameter Real SystemBase=100 "MVa";
   parameter Real v0=0.99422 "Power flow, node voltage";
   parameter Real anglev0=0.00158 "Power flow, node angle";
   parameter Real p0=0.44884 "Power flow, node active power";
   parameter Real q0=0 "Power flow, node reactive power";
-  OpenIPSL.Electrical.Solar.KTH.PFblocks.PVnew PVnew1 annotation (Placement(
-        transformation(
-        origin={-95.0,-5.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.PFblocks.DCBusBar DCBusBar1 annotation (
-      Placement(transformation(
-        origin={-12.3692,15.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.PVnew
+    PVnew1 annotation (Placement(transformation(origin={-95.0,-5.0}, extent={{-10.0,
+            -10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.DCBusBar
+    DCBusBar1 annotation (Placement(transformation(origin={-12.3692,15.0},
+          extent={{-10.0,-10.0},{10.0,10.0}})));
   Modelica.Blocks.Interfaces.RealInput E annotation (Placement(
       transformation(
         origin={-170.0,-5.0},
@@ -30,19 +28,19 @@ model PFmodelmpptCorrected05MW
   Modelica.Blocks.Sources.Constant const3(k=v0) annotation (Placement(transformation(
         origin={20.0,26.001},
         extent={{-3.999,-3.999},{3.999,3.999}})));
-  OpenIPSL.Electrical.Solar.KTH.PFblocks.Controller controller1(
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Controller
+    controller1(
     xq=xq,
     xd=xd,
-    v0=v0) annotation (Placement(transformation(
-        origin={67.0368,11.8218},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
-  OpenIPSL.Electrical.Solar.KTH.PFblocks.Staticgenerator staticgenerator1(
+    v0=v0) annotation (Placement(transformation(origin={67.0368,11.8218},
+          extent={{-10.0,-10.0},{10.0,10.0}})));
+  OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Staticgenerator
+    staticgenerator1(
     v0=v0,
     anglev0=anglev0,
     p0=p0,
-    q0=q0) annotation (Placement(transformation(
-        origin={110.0,5.0},
-        extent={{-10.0,-10.0},{10.0,10.0}})));
+    q0=q0) annotation (Placement(transformation(origin={110.0,5.0}, extent={{-10.0,
+            -10.0},{10.0,10.0}})));
   OpenIPSL.Interfaces.PwPin pwPin1(vi(start=v0*sin(anglev0)), vr(start=v0*cos(
           anglev0))) annotation (Placement(
       transformation(
