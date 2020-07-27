@@ -44,8 +44,8 @@ model DCBusBar
     capacitor1(
     C=C,
     Udc0=Udc0,
-    UdcN=UdcN) annotation (Placement(transformation(origin={7.8812,0.0}, extent
-          ={{-10.0,-10.0},{10.0,10.0}})));
+    UdcN=UdcN) annotation (Placement(transformation(origin={7.8812,0.0}, extent=
+           {{-10.0,-10.0},{10.0,10.0}})));
   OpenIPSL.Electrical.Solar.PowerFactory.DigSILENT_PVSystem.PFblocks.Auxiliary.pu_to_A
     pu_to_A1(Pnen=Pnen, UdcN=UdcN) annotation (Placement(transformation(origin=
             {40.0,0.0}, extent={{-10.0,-10.0},{10.0,10.0}})));
