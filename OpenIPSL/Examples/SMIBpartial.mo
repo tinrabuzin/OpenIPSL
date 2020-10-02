@@ -40,14 +40,6 @@ partial model SMIBpartial "SMIB system with one load"
     P_0=50000000,
     Q_0=10000000,
     v_0=0.9919935) annotation (Placement(transformation(extent={{-4,-52},{8,-40}})));
-  OpenIPSL.Electrical.Events.PwFault pwFault(
-    t1=2,
-    t2=2.15,
-    R=0,
-    X=0) annotation (Placement(transformation(
-        extent={{-6,-6},{6,6}},
-        rotation=-90,
-        origin={44,-60})));
   OpenIPSL.Electrical.Buses.Bus GEN1
     annotation (Placement(transformation(extent={{-50,-10},{-30,10}})));
   inner OpenIPSL.Electrical.SystemBase SysData
@@ -59,26 +51,24 @@ partial model SMIBpartial "SMIB system with one load"
   OpenIPSL.Electrical.Buses.Bus FAULT
     annotation (Placement(transformation(extent={{30,-40},{50,-20}})));
 equation
-  connect(GEN1.p, pwLine.p)
-    annotation (Line(points={{-40,0},{-40,0},{-25.4,0}}, color={0,0,255}));
-  connect(pwLine.n, LOAD.p)
-    annotation (Line(points={{-14.6,0},{-14.6,0},{0,0}}, color={0,0,255}));
-  connect(pwLine3.p, LOAD.p) annotation (Line(points={{14.6,-30},{4,-30},{4,0},
-          {0,0}},color={0,0,255}));
-  connect(constantLoad.p, LOAD.p)
-    annotation (Line(points={{2,-40},{2,0},{0,0}}, color={0,0,255}));
-  connect(pwLine1.p, LOAD.p)
-    annotation (Line(points={{34.6,30},{4,30},{4,0},{0,0}}, color={0,0,255}));
-  connect(GEN2.p, gENCLS.p)
-    annotation (Line(points={{80,0},{98,0},{98,0}}, color={0,0,255}));
-  connect(pwLine4.n, GEN2.p) annotation (Line(points={{65.4,-30},{76,-30},{76,0},
-          {80,0}}, color={0,0,255}));
-  connect(pwLine1.n, GEN2.p) annotation (Line(points={{45.4,30},{76,30},{76,0},
-          {80,0}},color={0,0,255}));
-  connect(FAULT.p, pwLine4.p)
-    annotation (Line(points={{40,-30},{54.6,-30}}, color={0,0,255}));
-  connect(FAULT.p, pwLine3.n)
-    annotation (Line(points={{40,-30},{25.4,-30}}, color={0,0,255}));
-  connect(pwFault.p, pwLine4.p)
-    annotation (Line(points={{44,-53},{44,-30},{54.6,-30}}, color={0,0,255}));
+  connect(GEN1.p, pwLine.p) annotation(
+    Line(points = {{-40, 0}, {-40, 0}, {-25.4, 0}}, color = {0, 0, 255}));
+  connect(pwLine.n, LOAD.p) annotation(
+    Line(points = {{-14.6, 0}, {-14.6, 0}, {0, 0}}, color = {0, 0, 255}));
+  connect(pwLine3.p, LOAD.p) annotation(
+    Line(points = {{14.6, -30}, {4, -30}, {4, 0}, {0, 0}}, color = {0, 0, 255}));
+  connect(constantLoad.p, LOAD.p) annotation(
+    Line(points = {{2, -40}, {2, 0}, {0, 0}}, color = {0, 0, 255}));
+  connect(pwLine1.p, LOAD.p) annotation(
+    Line(points = {{34.6, 30}, {4, 30}, {4, 0}, {0, 0}}, color = {0, 0, 255}));
+  connect(GEN2.p, gENCLS.p) annotation(
+    Line(points = {{80, 0}, {98, 0}, {98, 0}}, color = {0, 0, 255}));
+  connect(pwLine4.n, GEN2.p) annotation(
+    Line(points = {{65.4, -30}, {76, -30}, {76, 0}, {80, 0}}, color = {0, 0, 255}));
+  connect(pwLine1.n, GEN2.p) annotation(
+    Line(points = {{45.4, 30}, {76, 30}, {76, 0}, {80, 0}}, color = {0, 0, 255}));
+  connect(FAULT.p, pwLine4.p) annotation(
+    Line(points = {{40, -30}, {54.6, -30}}, color = {0, 0, 255}));
+  connect(FAULT.p, pwLine3.n) annotation(
+    Line(points = {{40, -30}, {25.4, -30}}, color = {0, 0, 255}));
 end SMIBpartial;

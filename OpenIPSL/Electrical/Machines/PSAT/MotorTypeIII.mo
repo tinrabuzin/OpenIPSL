@@ -33,13 +33,13 @@ model MotorTypeIII "Induction Machine - Order III"
     annotation (Dialog(group="Machine parameters"));
   SI.PerUnit v(start=v_0) "Bus voltage magnitude";
   SI.PerUnit anglev(start=angle_0) "Bus voltage angle";
-  SI.PerUnit s(start=S0);
-  SI.PerUnit Tm;
-  SI.PerUnit Te;
+  SI.PerUnit s(start=S0) "Machine slip";
+  SI.PerUnit Tm "Mechanical torque";
+  SI.PerUnit Te "Electrical torque";
   SI.PerUnit P(start=P_0/S_b);
-  SI.PerUnit Q(start=Q_0/S_b);
-  SI.PerUnit Vr;
-  SI.PerUnit Vm;
+  SI.PerUnit Q;//(start=Q_0/S_b);
+  SI.PerUnit Vr(start=vr0);
+  SI.PerUnit Vm(start=vi0);
   SI.PerUnit Ir;
   SI.PerUnit Im;
   SI.PerUnit epr(start=epr0);
@@ -80,9 +80,23 @@ protected
   parameter Real epr0=(K1*(X0 - Xp)*(-1)*ii0 - (X0 - Xp)*ir0)/K2;
 initial equation
   der(s) = 0;
+  P = P_0/S_b;
+  P = -(epr*Ir + epm*Im);
+  Vr^2 + Vm^2 = v_0^2;
   der(epr) = 0;
   der(epm) = 0;
 equation
+  // Torque model
+  Tm = A + B*s + C*s*s;
+  // Mechanical equation
+  der(s) = (Tm - Te)/(2*Hm);
+  // Single-cage model's differential equations
+  der(epr) = Omegab*s*epm - (epr + (X0 - Xp)*Im)/Tp0;
+  der(epm) = (-Omegab*s*epr) - (epm - (X0 - Xp)*Ir)/Tp0;
+  // Electrical torque equation
+  Te = epr*Ir + epm*Im;
+  
+  
   anglev = atan2(p.vi, p.vr);
   anglei = atan2(p.ii, p.ir);
   v = sqrt(p.vr^2 + p.vi^2);
@@ -91,15 +105,13 @@ equation
   Vm = p.vr;
   Im = p.ir;
   Ir = -p.ii;
-  P = p.vr*p.ir + p.vi*p.ii;
-  Q = (-p.vr*p.ii) + p.vi*p.ir;
-  der(s) = (Tm - Te)/(2*Hm);
-  Tm = A + B*s + C*s*s;
-  Te = epr*Ir + epm*Im;
-  der(epr) = Omegab*s*epm - (epr + (X0 - Xp)*Im)/Tp0;
-  der(epm) = (-Omegab*s*epr) - (epm - (X0 - Xp)*Ir)/Tp0;
+  
   Im = (-a23*((-Vr) - epr)) + a13*(Vm - epm);
   Ir = a13*((-Vr) - epr) + a23*(Vm - epm);
+  
+  // Active and reactive powers
+  P = p.vr*p.ir + p.vi*p.ii;
+  Q = (-p.vr*p.ii) + p.vi*p.ir;
   annotation (Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           fillColor={255,255,255},

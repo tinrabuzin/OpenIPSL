@@ -45,7 +45,7 @@ model TwoWindingTransformer
     annotation (Dialog(tab="Transformer Nominal Ratings Data"));
   parameter SI.ApparentPower S_n(displayUnit="MVA")=S_b "Winding MVA"
     annotation (Dialog(tab="Transformer Nominal Ratings Data"));
-protected
+//protected
   parameter SI.Voltage VNOM1_int=if abs(VNOM1) < Modelica.Constants.eps then VB1
        else VNOM1;
   parameter SI.Voltage VNOM2_int=if abs(VNOM2) < Modelica.Constants.eps then VB2
@@ -65,7 +65,8 @@ protected
   Complex ij(re=n.ir, im=n.ii);
 equation
   ej = ei/t + xeq*ij;
-  (ii - ei*Ym)*conj(t) = -ij;
+  ii = (ei*Ym*conj(t) - ij)/conj(t);
+  //(ii - ei*Ym)*conj(t) = -ij;
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-60,-40},{60,40}}),
         graphics={Rectangle(

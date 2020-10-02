@@ -13,7 +13,7 @@ partial model pfComponent
         tab="Parameter mask",
         __Dymola_compact=true,
         __Dymola_descriptionLabel=true), choices(checkBox=true));
-  parameter SI.Voltage V_b(displayUnit="kV")=400e3
+  parameter SI.Voltage V_b(displayUnit="kV")
     "Base voltage of the bus"
     annotation (Dialog(group="Power flow data", enable=enableV_b));
   parameter Boolean enableV_b = false
@@ -33,7 +33,7 @@ partial model pfComponent
         tab="Parameter mask",
         __Dymola_compact=true,
         __Dymola_descriptionLabel=true), choices(checkBox=true));
-  parameter SI.ActivePower P_0(displayUnit="MW")=1e6
+  parameter SI.ActivePower P_0(displayUnit="MW")
     "Initial active power"
     annotation (Dialog(group="Power flow data", enable=enableP_0));
   parameter Boolean enableP_0 = false
@@ -43,7 +43,7 @@ partial model pfComponent
         tab="Parameter mask",
         __Dymola_compact=true,
         __Dymola_descriptionLabel=true), choices(checkBox=true));
-  parameter SI.ReactivePower Q_0(displayUnit="Mvar")=0
+  parameter SI.ReactivePower Q_0(displayUnit="Mvar")
     "Initial reactive power"
     annotation (Dialog(group="Power flow data", enable=enableQ_0));
   parameter Boolean enableQ_0 = false
@@ -53,7 +53,7 @@ partial model pfComponent
         tab="Parameter mask",
         __Dymola_compact=true,
         __Dymola_descriptionLabel=true), choices(checkBox=true));
-  parameter SI.PerUnit v_0=1
+  parameter SI.PerUnit v_0
     "Initial voltage magnitude (pu)"
     annotation (Dialog(group="Power flow data", enable=enablev_0));
   parameter Boolean enablev_0 = false
@@ -63,7 +63,7 @@ partial model pfComponent
         tab="Parameter mask",
         __Dymola_compact=true,
         __Dymola_descriptionLabel=true), choices(checkBox=true));
-  parameter SI.Conversions.NonSIunits.Angle_deg angle_0=0
+  parameter SI.Conversions.NonSIunits.Angle_deg angle_0
     "Initial voltage angle"
     annotation (Dialog(group="Power flow data", enable=enableangle_0));
   parameter Boolean enableangle_0 = false

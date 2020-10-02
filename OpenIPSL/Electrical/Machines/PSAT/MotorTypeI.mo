@@ -44,7 +44,8 @@ model MotorTypeI "Induction Machine - Order I"
     ir(start=ir0),
     ii(start=ii0))
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-protected
+  parameter Real s0 = -B + sqrt(-B-4*C*(a-P_0/S_b));
+
   parameter SI.PerUnit vr0=v_0*cos(angle_0rad);
   parameter SI.PerUnit vi0=v_0*sin(angle_0rad);
   parameter SI.PerUnit ir0=(P_0/S_b*vr0 + Q_0/S_b*vi0)/(vr0^2 + vi0^2);
@@ -56,16 +57,23 @@ protected
 initial equation
   der(s) = 0;
 equation
-  P = p.vr*p.ir + p.vi*p.ii;
-  Q = (-p.vr*p.ii) + p.vi*p.ir;
+
+  // Mechanical differential equation
+  der(s) = (Tm - P)/(2*Hm);
+  
   anglev = atan2(p.vi, p.vr);
   v = sqrt(p.vr^2 + p.vi^2);
   Tm = A + B*s + C*s*s;
   Re = Rs + Rr1/s;
   //s=Rr1/(Re-Rs);
-  der(s) = (Tm - P)/(2*Hm);
+  
   p.ii = (-p.vr/Xm) + (p.vi*Re - p.vr*Xe)/(Re*Re + Xe*Xe);
   p.ir = p.vi/Xm + (p.vr*Re + p.vi*Xe)/(Re*Re + Xe*Xe);
+  
+  // Active and reactive powers
+  P = p.vr*p.ir + p.vi*p.ii;
+  Q = (-p.vr*p.ii) + p.vi*p.ir;
+  
   annotation (Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           fillColor={255,255,255},

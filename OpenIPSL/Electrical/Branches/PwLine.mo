@@ -34,10 +34,10 @@ model PwLine "Model for a transmission Line based on the pi-equivalent circuit"
       group="Visualisation",
       __Dymola_compact=true,
       __Dymola_descriptionLabel=true), choices(checkBox=true));
-  SI.ActivePower P12(displayUnit="MW");
-  SI.ActivePower P21(displayUnit="MW");
-  SI.ReactivePower Q12(displayUnit="Mvar");
-  SI.ReactivePower Q21(displayUnit="Mvar");
+  //SI.ActivePower P12(displayUnit="MW");
+  //SI.ActivePower P21(displayUnit="MW");
+  //SI.ReactivePower Q12(displayUnit="Mvar");
+  //SI.ReactivePower Q21(displayUnit="Mvar");
   Complex vs(re=p.vr, im=p.vi);
   Complex is(re=p.ir, im=p.ii);
   Complex vr(re=n.vr, im=n.vi);
@@ -47,26 +47,13 @@ protected
   parameter Complex Z(re=R, im=X);
 equation
   //Calculations for the power flow display
-  P12 = real(vs*conj(is))*S_b;
-  P21 = -real(vr*conj(ir))*S_b;
-  Q12 = imag(vs*conj(is))*S_b;
-  Q21 = -imag(vr*conj(ir))*S_b;
-  //PI model with different line openings
-  if time >= t1 and time < t2 then
-    if opening == 1 then
-      is = Complex(0);
-      ir = Complex(0);
-    elseif opening == 2 then
-      is = Complex(0);
-      ir = (vr - ir*Z)*Y;
-    else
-      ir = Complex(0);
-      is = (vs - is*Z)*Y;
-    end if;
-  else
-    vs - vr = Z*(is - vs*Y);
-    vr - vs = Z*(ir - vr*Y);
-  end if;
+  //P12 = real(vs*conj(is))*S_b;
+ // P21 = -real(vr*conj(ir))*S_b;
+ // Q12 = imag(vs*conj(is))*S_b;
+ // Q21 = -imag(vr*conj(ir))*S_b;
+  //PI model with different line openingss
+    vs - vr = Z*is;
+    vr - vs = Z*ir;
   annotation (Icon(coordinateSystem(preserveAspectRatio=true),
         graphics={Rectangle(
           extent={{-80,40},{80,-40}},
